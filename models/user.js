@@ -42,7 +42,5 @@ module.exports = sequelize => {
     }
   }, { sequelize });
 
-  User.hasMany(Course);
-
   return User;
 }

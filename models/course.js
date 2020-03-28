@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 
+
+
 module.exports = (sequelize) => {
   class Course extends Sequelize.Model { };
   Course.init({
@@ -32,7 +34,6 @@ module.exports = (sequelize) => {
 
   }, { sequelize });
 
-  Course.belongsTo(User);
 
   return Course;
 }
