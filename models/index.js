@@ -1,47 +1,65 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
-const db = {};
+const { Sequelize, DataTypes } = require('sequelize');
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
-
-// test connection to the database
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('database auth successful')
-  })
-  .catch(() => {
-    console.log('database auth unsuccessful');
-  })
+const sequelize = new Sequelize({
+  dialect: "sqlite",
+  storage: 'fsjstd-restapi.db'
+});
 
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    const model = sequelize['import'](path.join(__dirname, file));
-    db[model.name] = model;
-  });
+// test database connection
+(async function() {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+}());
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
+const User = sequelize.define('User', {
+  firstName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  emailAddress: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
   }
 });
 
+const Course = sequelize.define('Course', {
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  estimatedTime: DataTypes.STRING,
+  materialsNeeded: DataTypes.STRING
+});
+
+User.hasMany(Course);
+Course.belongsTo(User);
+
+
+
+const db = {};
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
