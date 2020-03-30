@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { User, Course } = require('../models').sequelize.models;
+
 const { 
   asyncHandler, 
   validateInput,
@@ -69,25 +70,30 @@ router.put('/:id', authenticateUser(), asyncHandler( async (req, res) => {
       for (let i = 0; i < keys.length; i++) {
         course[keys[i]] = req.body[keys[i]];
       }
+      //TODO: is this weird expression really necessary?
       await (await course).save();
     } else {
       res.status(401).end();
     }
   }
-  
   res.status(204).end();
 }));
 
 // DELETE course
 router.delete('/:id', authenticateUser(), asyncHandler( async (req, res) => {
+  const { userId } = res.locals.user;
   const course = await Course.findOne({
     where: {
       id: req.params.id
     }
   });
   if (course) {
-    (await course).destroy();
-    res.json({message: `Course with id of '${req.params.id}' deleted successfully`})
+    if (course.userId === userId) {
+      (await course).destroy();
+      res.json({message: `Course with id of '${req.params.id}' deleted successfully`})
+    } else {
+      res.status(401).end();
+    }
   } else {
     res.status(404).json({message: "Course to delete not found"});
   }
