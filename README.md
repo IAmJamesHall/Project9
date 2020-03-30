@@ -3,7 +3,7 @@
 ## Description
 In this project, I created a HTTP REST API for managing courses and users.
 
-This API provides these endpoints:
+This API provides these endpoints: (assuming the server is running on `localhost:5000`)
 
 ### Courses
 **Get a list of all courses**
@@ -49,7 +49,7 @@ Fields: (any number of these fields can be used)
 $ curl --user [your email]:[your password] -X DELETE http://localhost:5000/api/courses/[course id]
 ```
 
-
+---
 ### Users
 **Get currently authenticated user**
 ```
