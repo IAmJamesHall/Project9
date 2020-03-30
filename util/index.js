@@ -33,39 +33,42 @@ function authenticateUser() {
   return async (req, res, next) => {
     const auth = require('basic-auth');
     const authUser = auth(req);
-    // normalization
-    authUser.emailAddress = authUser.name;
-    authUser.password = authUser.pass;
-
-    // check if email address is present in auth headers
-    if (authUser.emailAddress) {
-      // if so, look for the User record w/ that email address
-      const foundUser = await User.findOne({
-        where: {
-          emailAddress: authUser.emailAddress
-        }
-      });
-
-      // if User record found
-      if (foundUser) {
-        // compare given password w/ stored hash
-        await bcrypt.compare(authUser.password, foundUser.password, (err, result) => {
-          if (result) { // if password is correct
-            res.locals.user = {
-              emailAddress: foundUser.emailAddress,
-              userId: foundUser.id
-            };
-            next();
-          } else {
-            res.status(401).end();
+    // normalization  
+    if (authUser) {
+      authUser.emailAddress = authUser.name;
+      authUser.password = authUser.pass;
+      // check if email address is present in auth headers
+      if (authUser.emailAddress) {
+        // if so, look for the User record w/ that email address
+        const foundUser = await User.findOne({
+          where: {
+            emailAddress: authUser.emailAddress
           }
         });
+
+        // if User record found
+        if (foundUser) {
+          // compare given password w/ stored hash
+          await bcrypt.compare(authUser.password, foundUser.password, (err, result) => {
+            if (result) { // if password is correct
+              res.locals.user = {
+                emailAddress: foundUser.emailAddress,
+                userId: foundUser.id
+              };
+              next();
+            } else {
+              res.status(401).end();
+            }
+          });
+        } else {
+          res.status(401).end()
+        }
       } else {
-        res.status(401).end()
+        res.locals.user = false;
+        next();
       }
     } else {
-      res.locals.user = false;
-      next();
+      res.status(401).end();
     }
   }
 }

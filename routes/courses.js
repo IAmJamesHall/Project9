@@ -12,6 +12,16 @@ const {
  COURSES
 ***********/
 
+const filterCourse = (course) => {
+  delete course.createdAt;
+  delete course.updatedAt;
+  delete course.User.password;
+  delete course.User.createdAt;
+  delete course.User.updatedAt;
+  console.log(course);
+  return course;
+}
+
 // GET list of all courses (with owning user)
 router.get('/', asyncHandler(async (req, res) => {
   console.log(res.locals.user)
@@ -20,7 +30,8 @@ router.get('/', asyncHandler(async (req, res) => {
       model: User
     }
   })
-  res.json(courses);
+  const filteredCourses = courses.map(course => filterCourse(course.toJSON()))
+  res.json(filteredCourses);
 }))
 
 // GET course for provided course ID (with owning user)
@@ -34,7 +45,8 @@ router.get('/:id', asyncHandler(async (req, res) => {
     }
   });
   if (course) {
-    res.json(course)
+    const filteredCourse = filterCourse(course.toJSON());
+    res.json(filteredCourse);
   } else {
     res.status(404).json({message: `No course found for id: ${req.params.id}`});
   }
@@ -73,7 +85,7 @@ router.put('/:id', authenticateUser(), asyncHandler( async (req, res) => {
       //TODO: is this weird expression really necessary?
       await (await course).save();
     } else {
-      res.status(401).end();
+      res.status(403).end();
     }
   }
   res.status(204).end();
@@ -92,7 +104,7 @@ router.delete('/:id', authenticateUser(), asyncHandler( async (req, res) => {
       (await course).destroy();
       res.json({message: `Course with id of '${req.params.id}' deleted successfully`})
     } else {
-      res.status(401).end();
+      res.status(403).end();
     }
   } else {
     res.status(404).json({message: "Course to delete not found"});
