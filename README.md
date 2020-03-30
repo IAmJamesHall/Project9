@@ -11,13 +11,15 @@ $ curl http://localhost:5000/api/courses
 
 **Get an individual course**
 ```
-$ curl http://localhost:5000/api/courses/1
+$ curl http://localhost:5000/api/courses/[course id]
 ```
 
 **Create new course**
+
 *must be authenticated to create a course*
+
 ```
-$ curl --user [your email]:[your password] -d '{"title":"[your title]", "description":"[your description]"}' -H "Content-Type: application/json" -X POST http://localhost:5000/api/courses
+$ curl --user [your email]:[your password] -d '{"title":"[your title]", "description":"[your description]"}' -H "Content-Type: application/json" -X POST http://localhost:5000/api/courses/[course id]
 ```
 Available options:
 - title (required)
@@ -25,6 +27,19 @@ Available options:
 - estimatedTime
 - materialsNeeded
 
+**Update a course**
+
+*must be authenticated as the course's owner to update it*
+```
+$ curl --user [your email]:[your password] -d '{"title":"[your updated title]"}' -H "Content-Type: application/json" -X PUT http://localhost:5000/api/courses/[course id]
+```
+
+**Delete a course**
+
+*must be authenticated as the course's owner to delete it*
+```
+$ curl --user [your email]:[your password] -X DELETE http://localhost:5000/api/courses/[course id]
+```
 
 
 ### Users
