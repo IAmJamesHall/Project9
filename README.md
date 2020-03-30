@@ -7,43 +7,32 @@ This API provides these endpoints:
 **Get a list of all courses**
 ```
 $ curl http://localhost:5000/api/courses
-[
-    {
-        "id": 1,
-        "userId": 1,
-        "title": "Course Title",
-        "description": "Course Description",
-        "estimatedTime": "",
-        "materialsNeeded": "",
-        "User": {
-            "id": 1,
-            "firstName": "John",
-            "lastName": "Doe",
-            "emailAddress": "john@doe.com"
-        }
-    },
-    {...}
-]
 ```
 
 **Get an individual course**
 ```
 $ curl http://localhost:5000/api/courses/1
-{
-    "id": 1,
-    "userId": 1,
-    "title": "Course Title",
-    "description": "Course Description",
-    "estimatedTime": "",
-    "materialsNeeded": "",
-    "User": {
-        "id": 1,
-        "firstName": "John",
-        "lastName": "Doe",
-        "emailAddress": "john@doe.com"
-    }
-}
 ```
+
+**Create new course**
+*must be authenticated to create a course*
+```
+$ curl --user [your email]:[your password] -d '{"title":"[your title]", "description":"[your description]"}' -H "Content-Type: application/json" -X POST http://localhost:5000/api/courses
+```
+Available options:
+- title (required)
+- description (required)
+- estimatedTime
+- materialsNeeded
+
+
+
+### Users
+**Get currently authenticated user**
+```
+$ curl --user [your email]:[your password] http://localhost:5000/api/users
+```
+
 
 We've supplied the following files for you to use: 
 
