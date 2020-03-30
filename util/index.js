@@ -1,3 +1,7 @@
+/**
+ * try/catch wrapper for asynchronous functinos
+ * @param {function} cb callback
+ */
 function asyncHandler(cb) {
   return async (req, res, next) => {
     try {
@@ -10,7 +14,7 @@ function asyncHandler(cb) {
 }
 
 /**
- * 
+ * check that all required keys are present in the input object
  * @param {list} requiredValues 
  * @param {object} input req.body, as received from the (post/put) request
  * @return {list} all validation errors, if any
@@ -18,7 +22,6 @@ function asyncHandler(cb) {
 function validateInput(requiredValues, input) {
   const errors = [];
   requiredValues.forEach((element, i) => {
-    console.log('validate input ', input[requiredValues[i]]);
     if (!input[requiredValues[i]]) {
       errors.push(`Error with '${requiredValues[i]}' validation.`);
     }
@@ -27,13 +30,16 @@ function validateInput(requiredValues, input) {
 }
 
 
+/**
+ * 
+ */
 const { User } = require('../models').sequelize.models;
 const bcrypt = require('bcryptjs');
 function authenticateUser() {
   return async (req, res, next) => {
     const auth = require('basic-auth');
     const authUser = auth(req);
-    // normalization  
+    // normalize attributes 
     if (authUser) {
       authUser.emailAddress = authUser.name;
       authUser.password = authUser.pass;
@@ -56,18 +62,18 @@ function authenticateUser() {
                 userId: foundUser.id
               };
               next();
-            } else {
+            } else { //password is incorrect
               res.status(401).end();
             }
           });
-        } else {
+        } else { //user was not found
           res.status(401).end()
         }
-      } else {
+      } else { //email address not present in auth headers
         res.locals.user = false;
         next();
       }
-    } else {
+    } else { //auth headers not present
       res.status(401).end();
     }
   }

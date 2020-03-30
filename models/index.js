@@ -2,6 +2,8 @@
 
 const { Sequelize, DataTypes } = require('sequelize');
 
+
+// create database
 const sequelize = new Sequelize({
   dialect: "sqlite",
   storage: 'fsjstd-restapi.db'
@@ -18,6 +20,7 @@ const sequelize = new Sequelize({
   }
 }());
 
+// User model for database
 const User = sequelize.define('User', {
   id: {
     type: DataTypes.INTEGER,
@@ -42,6 +45,7 @@ const User = sequelize.define('User', {
   }
 });
 
+// Course model for database
 const Course = sequelize.define('Course', {
   userId: {
     type: DataTypes.INTEGER,
@@ -59,6 +63,7 @@ const Course = sequelize.define('Course', {
   materialsNeeded: DataTypes.STRING
 });
 
+// define associations between models
 User.hasMany(Course);
 Course.belongsTo(User);
 
