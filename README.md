@@ -1,7 +1,49 @@
 
-# Full Stack JavaScript Techdegree v2 - REST API Project
+# Full Stack JavaScript Techdegree v2 - REST API Project (Project #9)
+## Description
+In this project, I started from a minimal provided HTTP API and built it out.
+This API provides these endpoints:
+### Users
+**Get a list of all courses**
+```
+$ curl http://localhost:5000/api/courses
+[
+    {
+        "id": 1,
+        "userId": 1,
+        "title": "Course Title",
+        "description": "Course Description",
+        "estimatedTime": "",
+        "materialsNeeded": "",
+        "User": {
+            "id": 1,
+            "firstName": "John",
+            "lastName": "Doe",
+            "emailAddress": "john@doe.com"
+        }
+    },
+    {...}
+]
+```
 
-## Overview of the Provided Project Files
+**Get an individual course**
+```
+$ curl http://localhost:5000/api/courses/1
+{
+    "id": 1,
+    "userId": 1,
+    "title": "Course Title",
+    "description": "Course Description",
+    "estimatedTime": "",
+    "materialsNeeded": "",
+    "User": {
+        "id": 1,
+        "firstName": "John",
+        "lastName": "Doe",
+        "emailAddress": "john@doe.com"
+    }
+}
+```
 
 We've supplied the following files for you to use: 
 
