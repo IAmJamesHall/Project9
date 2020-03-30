@@ -41,35 +41,38 @@ router.get('/:id', asyncHandler(async (req, res) => {
 
 // POST new course
 router.post('/', authenticateUser(), asyncHandler(async (req, res) => {
-  const validationErrors = validateInput(['title', 'description', 'userId'], req.body);
+  const validationErrors = validateInput(['title', 'description'], req.body);
 
-  console.log('validation errors', validationErrors);
   if (validationErrors.length === 0) {
-    const course = await Course.create(req.body)
+    const courseJSON = req.body;
+    courseJSON.userId = res.locals.user.userId || 0;
+    const course = await Course.create(courseJSON);
     res.json(course);
   } else {
     res.status(400).json({message: "Bad request", errors: validationErrors });
-  }
-  try {
-    
-  } catch (error) {
-    
   }
 }))
 
 // PUT update for course
 router.put('/:id', authenticateUser(), asyncHandler( async (req, res) => {
+  const { userId } = res.locals.user
   const course = await Course.findOne({
     where: {
       id: req.params.id
     }
   });
+  // if course was found
   if (course) {
-    keys = Object.keys(req.body);
-    for (let i = 0; i < keys.length; i++) {
-      course[keys[i]] = req.body[keys[i]];
+    // check that the user has permission to edit this course
+    if (course.userId === userId) {
+      keys = Object.keys(req.body);
+      for (let i = 0; i < keys.length; i++) {
+        course[keys[i]] = req.body[keys[i]];
+      }
+      await (await course).save();
+    } else {
+      res.status(401).end();
     }
-    await (await course).save();
   }
   
   res.status(204).end();
