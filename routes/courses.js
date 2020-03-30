@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const { User, Course } = require('../models').sequelize.models;
-const { asyncHandler, validateInput } = require('../util');
+const { 
+  asyncHandler, 
+  validateInput,
+  authenticateUser } = require('../util');
 
 
 
@@ -10,6 +13,7 @@ const { asyncHandler, validateInput } = require('../util');
 
 // GET list of all courses (with owning user)
 router.get('/', asyncHandler(async (req, res) => {
+  console.log(res.locals.user)
   const courses = await Course.findAll({
     include: {
       model: User
@@ -36,7 +40,7 @@ router.get('/:id', asyncHandler(async (req, res) => {
 }))
 
 // POST new course
-router.post('/', asyncHandler(async (req, res) => {
+router.post('/', authenticateUser(), asyncHandler(async (req, res) => {
   const validationErrors = validateInput(['title', 'description', 'userId'], req.body);
 
   console.log('validation errors', validationErrors);
@@ -54,7 +58,7 @@ router.post('/', asyncHandler(async (req, res) => {
 }))
 
 // PUT update for course
-router.put('/:id', asyncHandler( async (req, res) => {
+router.put('/:id', authenticateUser(), asyncHandler( async (req, res) => {
   const course = await Course.findOne({
     where: {
       id: req.params.id
@@ -72,7 +76,7 @@ router.put('/:id', asyncHandler( async (req, res) => {
 }));
 
 // DELETE course
-router.delete('/:id', asyncHandler( async (req, res) => {
+router.delete('/:id', authenticateUser(), asyncHandler( async (req, res) => {
   const course = await Course.findOne({
     where: {
       id: req.params.id

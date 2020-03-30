@@ -4,6 +4,8 @@
 const express = require('express');
 const morgan = require('morgan');
 
+
+
 // load routes
 const apiRoutes = require('./routes/api');
 
@@ -22,6 +24,8 @@ app.use(express.urlencoded());
 
 // TODO setup your api routes here
 app.use('/api', apiRoutes);
+
+
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
