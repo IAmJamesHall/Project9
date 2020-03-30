@@ -33,6 +33,12 @@ Available options:
 ```
 $ curl --user [your email]:[your password] -d '{"title":"[your updated title]"}' -H "Content-Type: application/json" -X PUT http://localhost:5000/api/courses/[course id]
 ```
+Available options:
+- userId
+- title (required)
+- description (required)
+- estimatedTime
+- materialsNeeded
 
 **Delete a course**
 
@@ -48,6 +54,15 @@ $ curl --user [your email]:[your password] -X DELETE http://localhost:5000/api/c
 $ curl --user [your email]:[your password] http://localhost:5000/api/users
 ```
 
+**Add a new user**
+```
+$ curl  -d '{"firstName":"[your first name]", "lastName":"[your last name]", "emailAddress":"[your email address]", "password":"[your password]"}' -H "Content-Type: application/json" -X POST http://localhost:5000/api/users
+```
+Fields: (all fields are required)
+- firstName
+- lastName
+- emailAddress
+- password
 
 We've supplied the following files for you to use: 
 
