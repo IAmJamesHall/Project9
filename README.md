@@ -5,7 +5,7 @@ In this project, I created a HTTP REST API for managing courses and users.
 
 This API provides these endpoints:
 
-### Users
+### Courses
 **Get a list of all courses**
 ```
 $ curl http://localhost:5000/api/courses
@@ -35,10 +35,10 @@ Fields:
 ```
 $ curl --user [your email]:[your password] -d '{"title":"[your updated title]"}' -H "Content-Type: application/json" -X PUT http://localhost:5000/api/courses/[course id]
 ```
-Fields:
+Fields: (any number of these fields can be used)
 - userId
-- title (required)
-- description (required)
+- title
+- description
 - estimatedTime
 - materialsNeeded
 
