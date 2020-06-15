@@ -30,9 +30,6 @@ function validateInput(requiredValues, input) {
 }
 
 
-/**
- * 
- */
 const { User } = require('../models').sequelize.models;
 const bcrypt = require('bcryptjs');
 function authenticateUser() {

@@ -1,73 +1,74 @@
-'use strict';
+"use strict";
 
-const { Sequelize, DataTypes } = require('sequelize');
-
+const { Sequelize, DataTypes } = require("sequelize");
 
 // create database
 const sequelize = new Sequelize({
   dialect: "sqlite",
-  storage: 'fsjstd-restapi.db'
+  storage: "fsjstd-restapi.db",
 });
 
-
 // test database connection
-(async function() {
+(async function () {
   try {
     await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
+    console.log("Connection has been established successfully.");
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error("Unable to connect to the database:", error);
   }
-}());
+})();
 
 // User model for database
-const User = sequelize.define('User', {
+const User = sequelize.define("User", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
   },
   firstName: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   lastName: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   emailAddress: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: false
-  }
+    allowNull: false,
+  },
 });
 
 // Course model for database
-const Course = sequelize.define('Course', {
+const Course = sequelize.define("Course", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
   userId: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   title: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   description: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   estimatedTime: DataTypes.STRING,
-  materialsNeeded: DataTypes.STRING
+  materialsNeeded: DataTypes.STRING,
 });
 
 // define associations between models
 User.hasMany(Course);
 Course.belongsTo(User);
-
-
 
 const db = {};
 db.sequelize = sequelize;
