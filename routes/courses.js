@@ -132,9 +132,7 @@ router.delete(
       // if user has permission to delete this course
       if (course.userId === userId) {
         await course.destroy();
-        res.json({
-          message: `Course with id of '${req.params.id}' deleted successfully`,
-        });
+        res.status(204).end();
       } else {
         //user does not own this course
         res.status(403).end();
