@@ -3,6 +3,7 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 
 
 
@@ -17,6 +18,9 @@ const app = express();
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
+
+// enable cross-origin resource requests
+app.use(cors());
 
 // Set up body-parser
 app.use(express.json());
