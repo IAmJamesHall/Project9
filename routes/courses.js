@@ -75,7 +75,7 @@ router.post(
       courseJSON.userId = res.locals.user.userId;
       const course = await Course.create(courseJSON);
       res.setHeader("Location", `/api/courses/${course.id}`);
-      res.status(201).end();
+      res.status(200).json({id: course.id});
     } else {
       res
         .status(400)
@@ -113,7 +113,7 @@ router.put(
         res.status(403).end();
       }
     }
-    res.status(204).end();
+    res.status(200).json({id: req.params.id});
   })
 );
 
